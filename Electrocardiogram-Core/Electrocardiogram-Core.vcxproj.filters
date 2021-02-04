@@ -42,4 +42,7 @@
   <ItemGroup>
     <None Include="Data\ecg.dat" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\Sources.txt" />
+  </ItemGroup>
 </Project>
