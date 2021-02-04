@@ -156,12 +156,19 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source\EKG.cpp" />
+    <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Signal.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\EKG.hpp" />
+    <ClInclude Include="Source\FileManager.hpp" />
     <ClInclude Include="Source\Signal.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\ecg.dat">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

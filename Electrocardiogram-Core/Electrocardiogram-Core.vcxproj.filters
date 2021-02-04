@@ -24,6 +24,9 @@
     <ClCompile Include="Source\EKG.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Source\FileManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Signal.hpp">
@@ -32,5 +35,11 @@
     <ClInclude Include="Source\EKG.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Source\FileManager.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Data\ecg.dat" />
   </ItemGroup>
 </Project>

@@ -5,21 +5,26 @@
 class Signal
 {
 public:
-    Signal() = default;
-
-    void ReadFromCSV(const std::string& filename);
-    void WriteToCSV(const std::string& filename);
-    uint64_t GetCount() const;
-    uint16_t GetMinimum() const;
-    uint16_t GetMaximum() const;
-    uint64_t GetSum() const;
-    uint64_t GetAverage() const;
-    uint64_t GetStandardDeviation() const;
-
+    Signal(std::vector<uint16_t> readings);
+    virtual ~Signal() = default;
+    size_t Count() const;
+    uint16_t Minimum() const;
+    uint16_t Maximum() const;
+    uint64_t Sum() const;
+    double_t Average() const;
+    double_t StandardDeviation() const;
     void Smooth();
 
-    // TODO: Operator Overload
+    Signal operator+(uint16_t value) const;
+    Signal operator-(uint16_t value) const;
+    Signal operator*(uint16_t value) const;
+    Signal& operator+=(uint16_t value);
+    Signal& operator-=(uint16_t value);
+    Signal& operator*=(uint16_t value);
 
-private:
+    virtual std::vector<std::string> Export() const;
+protected:
     std::vector<uint16_t> _readings;
+
+    double_t Variance() const;
 };
