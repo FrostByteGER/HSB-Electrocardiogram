@@ -13,7 +13,7 @@ public:
     uint64_t Sum() const;
     double_t Average() const;
     double_t StandardDeviation() const;
-    Signal Smooth() const;
+    std::vector<uint16_t> SmoothReadings(int16_t windowSize) const;
 
     Signal operator+(uint16_t value) const;
     Signal operator-(uint16_t value) const;
@@ -23,8 +23,9 @@ public:
     Signal& operator*=(uint16_t value);
 
     virtual std::vector<std::string> Export() const;
+
 protected:
-    std::vector<uint16_t> _readings;
+    std::vector<uint16_t> readings;
 
     double_t Variance() const;
 };

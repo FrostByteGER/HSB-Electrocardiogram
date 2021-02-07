@@ -10,11 +10,16 @@ double_t EKG::HeatbeatsPerMinute() const
     return 0.0;
 }
 
+uint32_t EKG::SamplingIntervalMs() const
+{
+    return samplingIntervalMs;
+}
+
 std::vector<std::string> EKG::Export() const
 {
     //TODO: Add milliseconds
-    std::vector<std::string> exportData(_readings.size());
-    for (uint16_t e : _readings)
+    std::vector<std::string> exportData(readings.size());
+    for (uint16_t e : readings)
     {
         exportData.push_back(std::to_string(e));
     }

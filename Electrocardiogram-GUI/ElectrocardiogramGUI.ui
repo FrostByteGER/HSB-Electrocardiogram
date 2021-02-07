@@ -155,5 +155,134 @@
  <resources>
   <include location="ElectrocardiogramGUI.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>triggered()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnActionQuitTriggered()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>triggered()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnAbout()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionLoadFile</sender>
+   <signal>triggered()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnLoadFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionUnloadFile</sender>
+   <signal>triggered()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnClear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnClear</sender>
+   <signal>clicked()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnClear()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>269</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnLoad</sender>
+   <signal>clicked()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnLoadFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>86</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSave</sender>
+   <signal>clicked()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnSaveFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSmooth</sender>
+   <signal>clicked()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnSmoothSignal()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>147</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

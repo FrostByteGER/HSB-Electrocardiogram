@@ -32,9 +32,8 @@ public:
     }
 
     //TODO: Test
-    void Export(const Signal& signal, const std::string& filename)
+    void Export(const std::vector<std::string>& data, const std::string& filename)
     {
-        std::vector<std::string> data = signal.Export();
         std::ofstream outputStream(filename);
         if(!outputStream)
         {
