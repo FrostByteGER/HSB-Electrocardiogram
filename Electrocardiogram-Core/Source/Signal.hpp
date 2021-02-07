@@ -13,7 +13,7 @@ public:
     uint64_t Sum() const;
     double_t Average() const;
     double_t StandardDeviation() const;
-    void Smooth();
+    Signal Smooth() const;
 
     Signal operator+(uint16_t value) const;
     Signal operator-(uint16_t value) const;

@@ -7,7 +7,7 @@
 
 Signal::Signal(std::vector<uint16_t> readings) : _readings{std::move(readings)}
 {
-    if (_readings.size() == 0)
+    if (_readings.empty())
         throw std::invalid_argument("Size of parameter \"readings\" must be greater than 0!");
 }
 
@@ -18,7 +18,7 @@ size_t Signal::Count() const
 
 uint16_t Signal::Minimum() const
 {
-    // Test if none found
+    // TODO: Test if none found
     return *std::min_element(_readings.begin(), _readings.end());
 }
 
@@ -42,8 +42,11 @@ double_t Signal::StandardDeviation() const
     return std::sqrt(Variance());
 }
 
-void Signal::Smooth()
+Signal Signal::Smooth() const
 {
+    Signal smoothedSignal(*this);
+
+    return smoothedSignal;
 }
 
 Signal Signal::operator+(uint16_t value) const
@@ -88,7 +91,7 @@ Signal& Signal::operator*=(uint16_t value)
 std::vector<std::string> Signal::Export() const
 {
     std::vector<std::string> exportData(_readings.size());
-    for (uint16_t e : _readings)
+    for (auto e : _readings)
     {
         exportData.push_back(std::to_string(e));
     }
