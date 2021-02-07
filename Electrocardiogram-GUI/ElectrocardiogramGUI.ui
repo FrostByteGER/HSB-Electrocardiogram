@@ -48,7 +48,7 @@
      </layout>
     </item>
     <item row="0" column="0">
-     <widget class="QChartView" name="chart"/>
+     <widget class="CustomQChartView" name="chart"/>
     </item>
     <item row="1" column="0">
      <layout class="QGridLayout" name="infoGridLayout">
@@ -147,9 +147,9 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>QChartView</class>
+   <class>CustomQChartView</class>
    <extends>QGraphicsView</extends>
-   <header>QtCharts</header>
+   <header>CustomQChartView.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

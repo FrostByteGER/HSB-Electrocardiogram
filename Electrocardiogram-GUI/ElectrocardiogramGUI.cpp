@@ -1,4 +1,10 @@
 #include "ElectrocardiogramGUI.hpp"
+#include <QLineSeries>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDebug>
+
+
 
 ElectrocardiogramGUI::ElectrocardiogramGUI(QWidget *parent) : QMainWindow(parent)
 {
@@ -9,16 +15,16 @@ ElectrocardiogramGUI::ElectrocardiogramGUI(QWidget *parent) : QMainWindow(parent
     ui.actionUnloadFile->setEnabled(false);
     ui.chart->setRenderHints(QPainter::Antialiasing);
     chart = ui.chart->chart();
-    xAxis = new QValueAxis();
+    xAxis = new QtCharts::QValueAxis();
     xAxis->setLabelFormat("%i");
     xAxis->setTitleText(QString("Seconds"));
     chart->addAxis(xAxis, Qt::AlignBottom);
-    yAxis = new QValueAxis();
+    yAxis = new QtCharts::QValueAxis();
     yAxis->setLabelFormat("%i");
     yAxis->setTitleText(QString("mV"));
     yAxis->setRange(-4, 4);
     chart->addAxis(yAxis, Qt::AlignLeft);
-    ui.chart->setRubberBand(QChartView::HorizontalRubberBand);
+    ui.chart->setRubberBand(QtCharts::QChartView::HorizontalRubberBand);
 }
 
 void ElectrocardiogramGUI::OnActionQuitTriggered()
@@ -53,7 +59,7 @@ void ElectrocardiogramGUI::OnLoadFile()
         ui.btnClear->setEnabled(true);
         ui.actionUnloadFile->setEnabled(true);
 
-        auto series = new QLineSeries();
+        auto series = new QtCharts::QLineSeries();
         uint64_t time = 0;
         for (auto e : loadedData)
         {
@@ -87,7 +93,7 @@ void ElectrocardiogramGUI::OnSmoothSignal()
     auto smoothedReadings = loadedEcg.get()->SmoothReadings(5);
     smoothedEcg = std::make_unique<EKG>(smoothedReadings);
     ui.btnSmooth->setEnabled(false);
-    auto series = new QLineSeries();
+    auto series = new QtCharts::QLineSeries();
     uint64_t time = 0;
     for (auto e : smoothedReadings)
     {

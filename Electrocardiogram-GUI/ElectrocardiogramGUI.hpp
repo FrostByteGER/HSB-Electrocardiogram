@@ -4,6 +4,7 @@
 #include "ui_ElectrocardiogramGUI.h"
 #include "../Electrocardiogram-Core/Source/EKG.hpp"
 #include "../Electrocardiogram-Core/Source/FileManager.hpp"
+#include <QValueAxis>
 
 class ElectrocardiogramGUI : public QMainWindow
 {
@@ -17,9 +18,9 @@ private:
     FileManager fileManager;
     std::unique_ptr<EKG> loadedEcg;
     std::unique_ptr<EKG> smoothedEcg;
-    QChart* chart;
-    QValueAxis* xAxis;
-    QValueAxis* yAxis;
+    QtCharts::QChart* chart;
+    QtCharts::QValueAxis* xAxis;
+    QtCharts::QValueAxis* yAxis;
 
     void Clear();
 
