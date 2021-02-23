@@ -8,7 +8,7 @@
 class FileManager
 {
 public:
-    std::vector<uint16_t> Import(const std::string& filename) const
+    [[nodiscard]] std::vector<uint16_t> Import(const std::string& filename) const
     {
         std::vector<uint16_t> data;
         std::ifstream inputStream(filename);

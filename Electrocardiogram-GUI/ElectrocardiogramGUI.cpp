@@ -12,6 +12,7 @@ ElectrocardiogramGUI::ElectrocardiogramGUI(QWidget *parent) : QMainWindow(parent
     ui.btnSave->setEnabled(false);
     ui.btnSmooth->setEnabled(false);
     ui.btnClear->setEnabled(false);
+    ui.btnSaveSmoothed->setEnabled(false);
     ui.actionUnloadFile->setEnabled(false);
     ui.chart->setRenderHints(QPainter::Antialiasing);
     chart = ui.chart->chart();
@@ -22,7 +23,6 @@ ElectrocardiogramGUI::ElectrocardiogramGUI(QWidget *parent) : QMainWindow(parent
     yAxis = new QtCharts::QValueAxis();
     yAxis->setLabelFormat("%i");
     yAxis->setTitleText(QString("mV"));
-    yAxis->setRange(-4, 4);
     chart->addAxis(yAxis, Qt::AlignLeft);
     ui.chart->setRubberBand(QtCharts::QChartView::HorizontalRubberBand);
 }
@@ -39,7 +39,7 @@ void ElectrocardiogramGUI::OnAbout() const
 
 void ElectrocardiogramGUI::OnLoadFile()
 {
-    const QString filename = QFileDialog::getOpenFileName(this->centralWidget(), QString("Open ECG"), QString(), QString("ECG(.dat) Files (*.dat);;All Files (*)"));
+    const QString filename = QFileDialog::getOpenFileName(this->centralWidget(), QString("Open ECG"), QString(), QString("ECG Files (*.dat);;All Files (*)"));
     qDebug() << filename;
     if(filename.isEmpty())
     {
@@ -76,23 +76,34 @@ void ElectrocardiogramGUI::OnLoadFile()
     }
 }
 
-void ElectrocardiogramGUI::OnSaveFile()
+void ElectrocardiogramGUI::OnSaveEcg()
 {
-    const QString filename = QFileDialog::getSaveFileName(this->centralWidget(), QString("Save ECG"), QString(), QString("ECG(.dat) Files (*.dat);;All Files (*)"));
+    const QString filename = QFileDialog::getSaveFileName(this->centralWidget(), QString("Save ECG"), QString(), QString("ECG Files (*.dat);;All Files (*)"));
+    SaveFile(loadedEcg.get(), filename);
+}
+
+void ElectrocardiogramGUI::OnSaveEcgSmoothed()
+{
+    const QString filename = QFileDialog::getSaveFileName(this->centralWidget(), QString("Save Smoothed ECG"), QString(), QString("ECG Files (*.dat);;All Files (*)"));
+    SaveFile(smoothedEcg.get(), filename);
+}
+
+void ElectrocardiogramGUI::SaveFile(EKG* ecg, const QString& filename)
+{
     qDebug() << filename;
-    if(!filename.isEmpty())
+    if (!filename.isEmpty())
     {
-        const std::vector<std::string> data = loadedEcg.get()->Export();
+        const std::vector<std::string> data = ecg->Export();
         fileManager.Export(data, filename.toStdString());
     }
 }
 
 void ElectrocardiogramGUI::OnSmoothSignal()
 {
-    //TODO: Does it really work?
     auto smoothedReadings = loadedEcg.get()->SmoothReadings(5);
     smoothedEcg = std::make_unique<EKG>(smoothedReadings);
     ui.btnSmooth->setEnabled(false);
+    ui.btnSaveSmoothed->setEnabled(true);
     auto series = new QtCharts::QLineSeries();
     uint64_t time = 0;
     for (auto e : smoothedReadings)
@@ -119,5 +130,6 @@ void ElectrocardiogramGUI::Clear()
     ui.btnClear->setEnabled(false);
     ui.btnSave->setEnabled(false);
     ui.btnSmooth->setEnabled(false);
+    ui.btnSaveSmoothed->setEnabled(false);
     ui.actionUnloadFile->setEnabled(false);
 }

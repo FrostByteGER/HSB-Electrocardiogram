@@ -39,6 +39,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btnSaveSmoothed">
+        <property name="text">
+         <string>Save Smoothed Signal</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btnClear">
         <property name="text">
          <string>Clear</string>
@@ -132,15 +139,24 @@
    <property name="text">
     <string>Load ECG File</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
   </action>
   <action name="actionUnloadFile">
    <property name="text">
     <string>Unload ECG File</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+U</string>
+   </property>
   </action>
   <action name="actionQuit">
    <property name="text">
     <string>Quit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Q</string>
    </property>
   </action>
  </widget>
@@ -256,7 +272,23 @@
    <sender>btnSave</sender>
    <signal>clicked()</signal>
    <receiver>ElectrocardiogramGUIClass</receiver>
-   <slot>OnSaveFile()</slot>
+   <slot>OnSaveEcg()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>552</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>299</x>
+     <y>199</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>btnSaveSmoothed</sender>
+   <signal>clicked()</signal>
+   <receiver>ElectrocardiogramGUIClass</receiver>
+   <slot>OnSaveEcgSmoothed()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>552</x>

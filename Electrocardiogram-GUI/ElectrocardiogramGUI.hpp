@@ -1,6 +1,5 @@
 #pragma once
 
-#include <QtWidgets/QMainWindow>
 #include "ui_ElectrocardiogramGUI.h"
 #include "../Electrocardiogram-Core/Source/EKG.hpp"
 #include "../Electrocardiogram-Core/Source/FileManager.hpp"
@@ -23,11 +22,13 @@ private:
     QtCharts::QValueAxis* yAxis;
 
     void Clear();
+    void SaveFile(EKG* ecg, const QString& filename);
 
 private slots:
     void OnActionQuitTriggered();
     void OnLoadFile();
-    void OnSaveFile();
+    void OnSaveEcg();
+    void OnSaveEcgSmoothed();
     void OnSmoothSignal();
     void OnClear();
     void OnAbout() const;
