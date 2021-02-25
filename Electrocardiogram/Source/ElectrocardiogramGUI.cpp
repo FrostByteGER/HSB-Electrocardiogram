@@ -171,6 +171,7 @@ void ElectrocardiogramGUI::Clear()
 {
     loadedEcg = nullptr;
     chart->removeAllSeries();
+    chart->zoomReset();
     ui.btnClear->setEnabled(false);
     ui.btnSave->setEnabled(false);
     ui.actionUnloadFile->setEnabled(false);
