@@ -1,5 +1,7 @@
 #include <iostream>
 
+
+#include "ConfigurationCache.hpp"
 #include "FileManager.hpp"
 #include "Signal.hpp"
 
@@ -10,19 +12,33 @@ int main(int argc, char* argv[])
         std::cout << "Elecrocardiogram!\n";
         std::vector<double_t> data = { 600, 470, 170, 430, 300 };
         const FileManager fileManager;
-        bool useGui = false;
-        for (size_t i = 1; i < argc; ++i)
+        for (int i = 1; i < argc; ++i)
         {
-            std::string argument(argv[i]);
-            if (argument == "-f")
+            std::string argument = argv[i];
+            // We completely ignore non-prefixed arguments here!
+            if(argument.rfind("--", 0) == 0 || argument.rfind('-', 0) == 0)
             {
-                data = fileManager.Import(argv[i + 1]);
-            }else if(argument == "-nogui")
-            {
-                useGui = false;
+                // Check if we have a value for the current argument, if so insert that one too, otherwise simply add the current argument
+                // with an empty string as its value
+                if (i + 1 < argc)
+                {
+                    std::string nextArgument = argv[i + 1];
+                    if(nextArgument.rfind("--", 0) == std::string::npos && nextArgument.rfind('-', 0) == std::string::npos)
+                    {
+                        ConfigurationCache::instance().addConfigValue(argument, nextArgument);
+                        continue;
+                    }
+                }
+                ConfigurationCache::instance().addConfigValue(argument, std::string());
             }
         }
-        if(useGui)
+        std::string filePath;
+        if (ConfigurationCache::instance().tryGetValue("-f", &filePath))
+        {
+            data = fileManager.Import(filePath);
+        }
+
+        if(ConfigurationCache::instance().tryGetValue("-nogui"))
         {
             //TODO: Merge GUI project
         }else

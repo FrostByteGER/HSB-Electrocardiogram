@@ -86,12 +86,14 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ConfigurationCache.cpp" />
     <ClCompile Include="Source\EKG.cpp" />
     <ClCompile Include="Source\FileManager.cpp" />
     <ClCompile Include="Source\Main.cpp" />
     <ClCompile Include="Source\Signal.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\ConfigurationCache.hpp" />
     <ClInclude Include="Source\EKG.hpp" />
     <ClInclude Include="Source\FileManager.hpp" />
     <ClInclude Include="Source\Signal.hpp" />
