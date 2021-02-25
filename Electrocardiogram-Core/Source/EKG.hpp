@@ -4,7 +4,7 @@
 
 struct HeartbeatFrame
 {
-    HeartbeatFrame(const double_t frameStartMs, const size_t frameEndMs) : frameStartMs(frameStartMs), frameEndMs(frameEndMs)
+    HeartbeatFrame(const size_t frameStartMs, const size_t frameEndMs) : frameStartMs(frameStartMs), frameEndMs(frameEndMs)
     {
     }
 

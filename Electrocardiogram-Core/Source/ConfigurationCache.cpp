@@ -7,7 +7,7 @@ bool ConfigurationCache::addConfigValue(const std::string& key, const std::strin
     {
         return false;
     }
-    configValues.insert(key, value);
+    configValues[key] = value;
     return true;
 }
 
