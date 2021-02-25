@@ -5,125 +5,95 @@
 #include <numeric>
 #include <utility>
 
-Signal::Signal(std::vector<double_t> readings) : readings{std::move(readings)}
+Signal::Signal(std::vector<double_t> readingData) : readingData{std::move(readingData)}
 {
-    if (this->readings.empty())
-        throw std::invalid_argument("Size of parameter \"readings\" must be greater than 0!");
+    if (this->readingData.empty())
+        throw std::invalid_argument("Size of parameter \"readingData\" must be greater than 0!");
 }
 
-std::vector<double_t> Signal::Readings() const
+const std::vector<double_t>& Signal::readings() const
 {
-    return readings;
+    return readingData;
 }
 
-size_t Signal::Count() const
+size_t Signal::count() const
 {
-    return readings.size();
+    return readingData.size();
 }
 
-double_t Signal::Minimum() const
+double_t Signal::minimum() const
 {
-    return *std::min_element(readings.begin(), readings.end());
+    return *std::min_element(readingData.begin(), readingData.end());
 }
 
-double_t Signal::Maximum() const
+double_t Signal::maximum() const
 {
-    return *std::max_element(readings.begin(), readings.end());
+    return *std::max_element(readingData.begin(), readingData.end());
 }
 
-double_t Signal::Sum() const
+double_t Signal::sum() const
 {
-    return std::accumulate(readings.begin(), readings.end(), 0.0);
+    return std::accumulate(readingData.begin(), readingData.end(), 0.0);
 }
 
-double_t Signal::Average() const
+double_t Signal::average() const
 {
-    return Sum() / static_cast<double_t>(Count());
+    return sum() / static_cast<double_t>(count());
 }
 
-double_t Signal::StandardDeviation() const
+double_t Signal::standardDeviation() const
 {
-    return std::sqrt(Variance());
+    return std::sqrt(variance());
 }
 
-std::vector<double_t> Signal::SmoothReadings(const int32_t windowSize) const
+double_t Signal::variance() const
 {
-    const int32_t totalWindowSize = windowSize * 2 + 1;
-    std::vector<double_t> smoothedReadings;
-    smoothedReadings.reserve(readings.size());
-    for (size_t idx = 0; idx < readings.size(); ++idx)
-    {
-        double_t sum = 0;
-        for (int32_t windowIdx = -windowSize; windowIdx < windowSize + 1; ++windowIdx)
+    const double_t avg = average();
+    const double_t result = std::accumulate(readingData.begin(), readingData.end(), 0.0, [avg](const double_t sum, const double_t value)
         {
-            const int32_t offsetIdx = static_cast<int32_t>(idx) + windowIdx;
-            const int32_t currentIdx = std::clamp(offsetIdx, 0, static_cast<int32_t>(readings.size()) - 1);
-            sum += readings[currentIdx];
-        }
-        const double_t average = sum / totalWindowSize;
-        smoothedReadings.push_back(average);
-    }
-    return smoothedReadings;
+            const double_t tempResult = value - avg;
+            return sum + tempResult * tempResult;
+        });
+
+    return result / static_cast<double_t>(count());
 }
+
 
 Signal Signal::operator+(double_t value) const
 {
     Signal signal(*this);
-    std::transform(signal.readings.begin(), signal.readings.end(), signal.readings.begin(), [value](const double_t i) {return i + value; });
+    std::transform(signal.readingData.begin(), signal.readingData.end(), signal.readingData.begin(), [value](const double_t i) {return i + value; });
     return signal;
 }
 
 Signal Signal::operator-(double_t value) const
 {
     Signal signal(*this);
-    std::transform(signal.readings.begin(), signal.readings.end(), signal.readings.begin(), [value](const double_t i) {return i - value; });
+    std::transform(signal.readingData.begin(), signal.readingData.end(), signal.readingData.begin(), [value](const double_t i) {return i - value; });
     return signal;
 }
 
 Signal Signal::operator*(double_t value) const
 {
     Signal signal(*this);
-    std::transform(signal.readings.begin(), signal.readings.end(), signal.readings.begin(), [value](const double_t i) {return i * value; });
+    std::transform(signal.readingData.begin(), signal.readingData.end(), signal.readingData.begin(), [value](const double_t i) {return i * value; });
     return signal;
 }
 
 Signal& Signal::operator+=(double_t value)
 {
-    std::transform(this->readings.begin(), this->readings.end(), this->readings.begin(), [value](const double_t i) {return i + value; });
+    std::transform(this->readingData.begin(), this->readingData.end(), this->readingData.begin(), [value](const double_t i) {return i + value; });
     return *this;
 }
 
 Signal& Signal::operator-=(double_t value)
 {
-    std::transform(this->readings.begin(), this->readings.end(), this->readings.begin(), [value](const double_t i) {return i - value; });
+    std::transform(this->readingData.begin(), this->readingData.end(), this->readingData.begin(), [value](const double_t i) {return i - value; });
     return *this;
 }
 
 Signal& Signal::operator*=(double_t value)
 {
-    std::transform(this->readings.begin(), this->readings.end(), this->readings.begin(), [value](const double_t i) {return i * value; });
+    std::transform(this->readingData.begin(), this->readingData.end(), this->readingData.begin(), [value](const double_t i) {return i * value; });
     return *this;
-}
-
-std::vector<std::string> Signal::Export() const
-{
-    std::vector<std::string> exportData;
-    exportData.reserve(readings.size());
-    for (auto e : readings)
-    {
-        exportData.push_back(std::to_string(e));
-    }
-    return exportData;
-}
-
-double_t Signal::Variance() const
-{
-    const double_t average = Average();
-    const double_t result =  std::accumulate(readings.begin(), readings.end(), 0.0, [average](const double_t sum, const double_t value)
-    {
-        const double_t tempResult = value - average;
-        return sum + tempResult * tempResult;
-    });
-
-    return result / static_cast<double_t>(Count());
 }

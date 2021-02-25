@@ -44,12 +44,12 @@ int main(int argc, char* argv[])
         }else
         {
             const Signal signal(data);
-            std::cout << "Count: " << signal.Count() << "\n"
-                << "Min: " << signal.Minimum() << "\n"
-                << "Max: " << signal.Maximum() << "\n"
-                << "Sum: " << signal.Sum() << "\n"
-                << "Average: " << signal.Average() << "\n"
-                << "Standard Deviation: " << signal.StandardDeviation() << std::endl;
+            std::cout << "Count: " << signal.count() << "\n"
+                << "Min: " << signal.minimum() << "\n"
+                << "Max: " << signal.maximum() << "\n"
+                << "Sum: " << signal.sum() << "\n"
+                << "Average: " << signal.average() << "\n"
+                << "Standard Deviation: " << signal.standardDeviation() << std::endl;
             Signal signal2 = signal + 1;
             signal2 = signal - 1;
             signal2 = signal * 2;

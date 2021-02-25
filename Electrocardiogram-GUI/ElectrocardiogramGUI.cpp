@@ -66,7 +66,7 @@ void ElectrocardiogramGUI::OnLoadFile()
         for (auto e : loadedData)
         {
             series->append(time, e);
-            time += loadedEcg.get()->SamplingIntervalMs();
+            time += loadedEcg.get()->samplingIntervalMs();
         }
         chart->addSeries(series);
         series->setColor(QColor(Qt::green));
@@ -96,14 +96,14 @@ void ElectrocardiogramGUI::SaveFile(EKG* ecg, const QString& filename)
     qDebug() << filename;
     if (!filename.isEmpty())
     {
-        const std::vector<std::string> data = ecg->Export();
+        const std::vector<std::string> data = ecg->exportToCsv();
         fileManager.Export(data, filename.toStdString());
     }
 }
 
 void ElectrocardiogramGUI::OnSmoothSignal()
 {
-    auto smoothedReadings = loadedEcg.get()->SmoothReadings(2);
+    auto smoothedReadings = loadedEcg.get()->smoothReadings(2);
     smoothedEcg = std::make_unique<EKG>(smoothedReadings);
 
     ui.btnSmooth->setEnabled(false);
@@ -114,7 +114,7 @@ void ElectrocardiogramGUI::OnSmoothSignal()
     for (auto e : smoothedReadings)
     {
         series->append(time, e);
-        time += loadedEcg.get()->SamplingIntervalMs();
+        time += loadedEcg.get()->samplingIntervalMs();
     }
 
     auto seriesDeriv = new QtCharts::QLineSeries();
@@ -128,10 +128,10 @@ void ElectrocardiogramGUI::OnSmoothSignal()
         const double_t previous = smoothedReadings[prevIdx];
         const double_t next = smoothedReadings[nextIdx];
 
-        const double_t result = (next - previous) / (2.0 * smoothedEcg->SamplingIntervalMs());
+        const double_t result = (next - previous) / (2.0 * smoothedEcg->samplingIntervalMs());
         derivatedReadings.push_back(result);
         seriesDeriv->append(time, result);
-        time += smoothedEcg->SamplingIntervalMs();
+        time += smoothedEcg->samplingIntervalMs();
     }
 
     seriesDeriv->setColor(QColor(Qt::red));
@@ -142,32 +142,33 @@ void ElectrocardiogramGUI::OnSmoothSignal()
     chart->addSeries(meanSeries);
     meanSeries->attachAxis(xAxis);
     meanSeries->attachAxis(yAxis);
-    meanSeries->append(0, smoothedEcg->Average());
-    meanSeries->append(smoothedReadings.size() * smoothedEcg->SamplingIntervalMs(), smoothedEcg->Average());
+    meanSeries->append(0, smoothedEcg->average());
+    meanSeries->append(smoothedReadings.size() * smoothedEcg->samplingIntervalMs(), smoothedEcg->average());
 
     auto stdDeviationTopSeries = new QtCharts::QLineSeries();
     chart->addSeries(stdDeviationTopSeries);
     stdDeviationTopSeries->attachAxis(xAxis);
     stdDeviationTopSeries->attachAxis(yAxis);
-    stdDeviationTopSeries->append(0, smoothedEcg->Average() + smoothedEcg->StandardDeviation());
-    stdDeviationTopSeries->append(smoothedReadings.size() * smoothedEcg->SamplingIntervalMs(), smoothedEcg->Average() + smoothedEcg->StandardDeviation());
+    stdDeviationTopSeries->append(0, smoothedEcg->average() + smoothedEcg->standardDeviation());
+    stdDeviationTopSeries->append(smoothedReadings.size() * smoothedEcg->samplingIntervalMs(), smoothedEcg->average() + smoothedEcg->standardDeviation());
 
     auto stdDeviationBottomSeries = new QtCharts::QLineSeries();
     chart->addSeries(stdDeviationBottomSeries);
     stdDeviationBottomSeries->attachAxis(xAxis);
     stdDeviationBottomSeries->attachAxis(yAxis);
-    stdDeviationBottomSeries->append(0, smoothedEcg->Average() - smoothedEcg->StandardDeviation());
-    stdDeviationBottomSeries->append(smoothedReadings.size() * smoothedEcg->SamplingIntervalMs(), smoothedEcg->Average() - smoothedEcg->StandardDeviation());
+    stdDeviationBottomSeries->append(0, smoothedEcg->average() - smoothedEcg->standardDeviation());
+    stdDeviationBottomSeries->append(smoothedReadings.size() * smoothedEcg->samplingIntervalMs(), smoothedEcg->average() - smoothedEcg->standardDeviation());
     
     const int32_t tailLength = 25;
-    auto hearbeats = smoothedEcg->DetectHeartbeats(smoothedReadings, tailLength);
+    smoothedEcg->detectHeartbeats(smoothedReadings, tailLength);
+
 
     QtCharts::QAreaSeries* heartBeatAreaSeries = nullptr;
-    for (const auto& beat : hearbeats)
+    for (const auto& beat : smoothedEcg->heartbeats())
     {
         auto upperSeries = new QtCharts::QLineSeries();
-        upperSeries->append(beat.frameStartMs, loadedEcg->Maximum());
-        upperSeries->append(beat.frameEndMs, loadedEcg->Maximum());
+        upperSeries->append(beat.frameStartMs, loadedEcg->maximum());
+        upperSeries->append(beat.frameEndMs, loadedEcg->maximum());
         auto lowerSeries = new QtCharts::QLineSeries();
         lowerSeries->append(beat.frameStartMs, 0);
         lowerSeries->append(beat.frameEndMs, 0);
