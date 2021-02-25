@@ -34,7 +34,6 @@ int main(int argc, char* argv[])
 {
     try
     {
-
         parseCommandlineArguments(argc, argv);
         if(ConfigurationCache::instance().keyExists("--nogui"))
         {
@@ -79,7 +78,17 @@ int main(int argc, char* argv[])
                 << "Heartbeats: " << ecg.heartbeatCount() << "\n"
                 << "Heartbeats per Minute: " << ecg.heartbeatsPerMinute()
                 << std::endl;
-            
+
+            Signal baseExampleSignal = signalProcessor.constructSignalFromReadings({100});
+            Signal additionExampleSignal = baseExampleSignal + 3;
+            Signal subtractionExampleSignal = baseExampleSignal - 15;
+            Signal multiplicationExampleSignal = baseExampleSignal * 37;
+            std::cout << "Signal Operator Overload Examples: " << "\n"
+                << "Base Signal Value: " << baseExampleSignal.readings().at(0) << "\n"
+                << "Signal value after constant addition by 3: " << additionExampleSignal.readings().at(0) << "\n"
+                << "Signal value after constant subtraction by 15: " << subtractionExampleSignal.readings().at(0) << "\n"
+                << "Signal value after constant multiplication by 37: " << multiplicationExampleSignal.readings().at(0) << "\n" << std::endl;
+
             std::string outFilePath;
             if(ConfigurationCache::instance().tryGetValue("--output-file", &outFilePath))
             {
