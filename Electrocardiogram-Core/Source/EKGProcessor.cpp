@@ -5,11 +5,11 @@
 
 #include "EKG.hpp"
 
-EKG EKGProcessor::constructEkgFromSignal(const Signal& signal, uint32_t samplingIntervalMs,
+EKG EKGProcessor::constructEkgFromReadings(const std::vector<double_t>& rawReadings, const std::vector<double_t>& smoothedReadings, uint32_t samplingIntervalMs,
     int32_t signalRangeMilliVolt, int32_t signalRangeRawMax, int32_t heartbeatTailLength)
 {
-    const std::vector<double_t> mappedReadings = mapToMillivoltRange(signal.readings(), signalRangeMilliVolt, signalRangeRawMax);
-    const std::vector<Heartbeat> heartbeats = detectHeartbeats(mappedReadings, samplingIntervalMs, heartbeatTailLength);
+    const std::vector<double_t> mappedReadings = mapToMillivoltRange(rawReadings, signalRangeMilliVolt, signalRangeRawMax);
+    const std::vector<Heartbeat> heartbeats = detectHeartbeats(smoothedReadings, samplingIntervalMs, heartbeatTailLength);
     EKG ecg = EKG(mappedReadings, heartbeats, samplingIntervalMs);
     return ecg;
 }

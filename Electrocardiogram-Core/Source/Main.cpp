@@ -4,6 +4,31 @@
 #include "ConfigurationCache.hpp"
 #include "FileManager.hpp"
 #include "Signal.hpp"
+#include "Main.h"
+
+void parseCommandlineArguments(int argc, char* argv[])
+{
+    for (int i = 1; i < argc; ++i)
+    {
+        std::string argument = argv[i];
+        // We completely ignore non-prefixed arguments here!
+        if (argument.rfind("--", 0) == 0 || argument.rfind('-', 0) == 0)
+        {
+            // Check if we have a value for the current argument, if so insert that one too, otherwise simply add the current argument
+            // with an empty string as its value
+            if (i + 1 < argc)
+            {
+                std::string nextArgument = argv[i + 1];
+                if (nextArgument.rfind("--", 0) == std::string::npos && nextArgument.rfind('-', 0) == std::string::npos)
+                {
+                    ConfigurationCache::instance().addConfigValue(argument, nextArgument);
+                    continue;
+                }
+            }
+            ConfigurationCache::instance().addConfigValue(argument, std::string());
+        }
+    }
+}
 
 int main(int argc, char* argv[])
 {
@@ -12,26 +37,7 @@ int main(int argc, char* argv[])
         std::cout << "Elecrocardiogram!\n";
         std::vector<double_t> data = { 600, 470, 170, 430, 300 };
         const FileManager fileManager;
-        for (int i = 1; i < argc; ++i)
-        {
-            std::string argument = argv[i];
-            // We completely ignore non-prefixed arguments here!
-            if(argument.rfind("--", 0) == 0 || argument.rfind('-', 0) == 0)
-            {
-                // Check if we have a value for the current argument, if so insert that one too, otherwise simply add the current argument
-                // with an empty string as its value
-                if (i + 1 < argc)
-                {
-                    std::string nextArgument = argv[i + 1];
-                    if(nextArgument.rfind("--", 0) == std::string::npos && nextArgument.rfind('-', 0) == std::string::npos)
-                    {
-                        ConfigurationCache::instance().addConfigValue(argument, nextArgument);
-                        continue;
-                    }
-                }
-                ConfigurationCache::instance().addConfigValue(argument, std::string());
-            }
-        }
+        parseCommandlineArguments(argc, argv);
         std::string filePath;
         if (ConfigurationCache::instance().tryGetValue("-f", &filePath))
         {

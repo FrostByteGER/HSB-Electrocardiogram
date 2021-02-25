@@ -14,7 +14,8 @@ class EKGProcessor : public AbstractProcessor<EKGProcessor, EKG>
     friend AbstractProcessor;
 
 public:
-    [[nodiscard]] EKG constructEkgFromSignal(const Signal& signal, uint32_t samplingIntervalMs, int32_t signalRangeMilliVolt, int32_t signalRangeRawMax, int32_t heartbeatTailLength);
+    [[nodiscard]] EKG constructEkgFromReadings(const std::vector<double_t>& rawReadings, const std::vector<double_t>& smoothedReadings, uint32_t samplingIntervalMs,
+        int32_t signalRangeMilliVolt, int32_t signalRangeRawMax, int32_t heartbeatTailLength);
 
 protected:
     [[nodiscard]] std::vector<std::string> exportToCsvImpl(const EKG& obj) const override;
