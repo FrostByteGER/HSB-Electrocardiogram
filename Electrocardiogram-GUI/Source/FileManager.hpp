@@ -3,7 +3,6 @@
 #include <fstream>
 #include <vector>
 
-//TODO: Move to cpp
 // Why its own class? So we dont have to pass filename as constructor arg to Signal or use a static factory
 class FileManager
 {
@@ -26,7 +25,7 @@ public:
     }
 
     //TODO: Test
-    void Export(const std::vector<std::string>& data, const std::string& filename)
+    void Export(const std::vector<std::string>& data, const std::string& filename) const
     {
         std::ofstream outputStream(filename);
         if(!outputStream)

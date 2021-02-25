@@ -7,7 +7,7 @@
 #include <QFileDialog>
 #include <QDebug>
 
-#include "../Electrocardiogram-Core/Source/ConfigurationCache.hpp"
+#include "ConfigurationCache.hpp"
 
 
 ElectrocardiogramGUI::ElectrocardiogramGUI(QWidget *parent) : QMainWindow(parent)
@@ -63,7 +63,7 @@ void ElectrocardiogramGUI::OnLoadFile()
     {
         // Get everything from commandline if possible
         int32_t windowSize = 2;
-        ConfigurationCache::instance().tryGetValue("--window-size", &windowSize);
+        ConfigurationCache::instance().tryGetValue("--smoothing-window-size", &windowSize);
         uint32_t samplingIntervalMs = 5;
         ConfigurationCache::instance().tryGetValue("--sampling-interval", &samplingIntervalMs);
         int32_t signalRangeMilliVolt = 4;
@@ -71,7 +71,7 @@ void ElectrocardiogramGUI::OnLoadFile()
         int32_t signalRangeRawMax = std::numeric_limits<uint16_t>::max();
         ConfigurationCache::instance().tryGetValue("--signalrange-max", &signalRangeRawMax);
         int32_t tailLength = 25;
-        ConfigurationCache::instance().tryGetValue("--tail-length", &tailLength);
+        ConfigurationCache::instance().tryGetValue("--heartbeat-tail-length", &tailLength);
 
         const std::vector<double_t> loadedData = fileManager.Import(filename.toStdString());
         Signal signal = Signal(loadedData);

@@ -43,8 +43,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <OutDir>$(ProjectDir)bin\debug-windows-x64\</OutDir>
+    <IntDir>$(ProjectDir)bin-intermediates\debug-windows-x64\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutDir>$(ProjectDir)bin\release-windows-x64\</OutDir>
+    <IntDir>$(ProjectDir)bin-intermediates\release-windows-x64\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -103,20 +107,35 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Source\ConfigurationCache.cpp" />
+    <ClCompile Include="Source\EKG.cpp" />
+    <ClCompile Include="Source\EKGProcessor.cpp" />
+    <ClCompile Include="Source\FileManager.cpp" />
+    <ClCompile Include="Source\Main.cpp" />
+    <ClCompile Include="Source\Signal.cpp" />
+    <ClCompile Include="Source\SignalProcessor.cpp" />
     <QtRcc Include="ElectrocardiogramGUI.qrc" />
     <QtUic Include="ElectrocardiogramGUI.ui" />
-    <QtMoc Include="ElectrocardiogramGUI.hpp" />
-    <ClCompile Include="CustomQChartView.cpp" />
-    <ClCompile Include="ElectrocardiogramGUI.cpp" />
-    <ClCompile Include="main.cpp" />
+    <QtMoc Include="Source\ElectrocardiogramGUI.hpp" />
+    <ClCompile Include="Source\CustomQChartView.cpp" />
+    <ClCompile Include="Source\ElectrocardiogramGUI.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Electrocardiogram-Core\Electrocardiogram-Core.vcxproj">
-      <Project>{d591798c-95b0-417b-aa1b-fdd03641a11d}</Project>
-    </ProjectReference>
+    <ClInclude Include="Source\CustomQChartView.hpp" />
+    <ClInclude Include="Source\AbstractProcessor.hpp" />
+    <ClInclude Include="Source\ConfigurationCache.hpp" />
+    <ClInclude Include="Source\EKG.hpp" />
+    <ClInclude Include="Source\EKGProcessor.hpp" />
+    <ClInclude Include="Source\FileManager.hpp" />
+    <ClInclude Include="Source\Heartbeat.hpp" />
+    <ClInclude Include="Source\Signal.hpp" />
+    <ClInclude Include="Source\SignalProcessor.hpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="CustomQChartView.hpp" />
+    <None Include="Data\ecg.dat" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Data\Sources.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

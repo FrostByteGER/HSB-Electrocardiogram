@@ -1,12 +1,12 @@
 #pragma once
 
 #include "ui_ElectrocardiogramGUI.h"
-#include "../Electrocardiogram-Core/Source/EKG.hpp"
-#include "../Electrocardiogram-Core/Source/FileManager.hpp"
+#include "EKG.hpp"
+#include "FileManager.hpp"
 #include <QValueAxis>
 
-#include "../Electrocardiogram-Core/Source/EKGProcessor.hpp"
-#include "../Electrocardiogram-Core/Source/SignalProcessor.hpp"
+#include "EKGProcessor.hpp"
+#include "SignalProcessor.hpp"
 
 class ElectrocardiogramGUI : public QMainWindow
 {
