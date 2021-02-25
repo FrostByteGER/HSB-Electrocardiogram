@@ -5,6 +5,9 @@
 #include "../Electrocardiogram-Core/Source/FileManager.hpp"
 #include <QValueAxis>
 
+#include "../Electrocardiogram-Core/Source/EKGProcessor.hpp"
+#include "../Electrocardiogram-Core/Source/SignalProcessor.hpp"
+
 class ElectrocardiogramGUI : public QMainWindow
 {
     Q_OBJECT
@@ -15,8 +18,10 @@ public:
 private:
     Ui::ElectrocardiogramGUIClass ui;
     FileManager fileManager;
+    SignalProcessor signalProcessor;
+    EKGProcessor ecgProcessor;
+    
     std::unique_ptr<EKG> loadedEcg;
-    std::unique_ptr<EKG> smoothedEcg;
     QtCharts::QChart* chart;
     QtCharts::QValueAxis* xAxis;
     QtCharts::QValueAxis* yAxis;
@@ -28,8 +33,6 @@ private slots:
     void OnActionQuitTriggered();
     void OnLoadFile();
     void OnSaveEcg();
-    void OnSaveEcgSmoothed();
-    void OnSmoothSignal();
     void OnClear();
     void OnAbout() const;
 };

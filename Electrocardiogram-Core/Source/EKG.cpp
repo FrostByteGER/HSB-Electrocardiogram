@@ -20,7 +20,8 @@ size_t EKG::heartbeatCount() const
 
 double_t EKG::heartbeatsPerMinute() const
 {
-    return 0.0;
+    // 60000ms = 1min
+    return static_cast<double_t>(heartbeatCount()) * (60000.0 / static_cast<double_t>(readings().size() * samplingIntervalMs()));
 }
 
 uint32_t EKG::samplingIntervalMs() const

@@ -10,7 +10,7 @@ Signal SignalProcessor::constructSignalFromReadings(const std::vector<double_t>&
 
 Signal SignalProcessor::smoothSignal(const Signal& signal, const int32_t windowSize) const
 {
-    const auto signalReadings = signal.readings();
+    const std::vector<double_t>& signalReadings = signal.readings();
     const int32_t totalWindowSize = windowSize * 2 + 1;
     std::vector<double_t> smoothedReadings;
     smoothedReadings.reserve(signalReadings.size());

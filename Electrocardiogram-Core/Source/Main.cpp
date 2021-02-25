@@ -4,7 +4,6 @@
 #include "ConfigurationCache.hpp"
 #include "FileManager.hpp"
 #include "Signal.hpp"
-#include "Main.h"
 
 void parseCommandlineArguments(int argc, char* argv[])
 {
@@ -38,13 +37,13 @@ int main(int argc, char* argv[])
         std::vector<double_t> data = { 600, 470, 170, 430, 300 };
         const FileManager fileManager;
         parseCommandlineArguments(argc, argv);
+        ConfigurationCache::instance().addConfigValue("-f", "asdf");
         std::string filePath;
         if (ConfigurationCache::instance().tryGetValue("-f", &filePath))
         {
             data = fileManager.Import(filePath);
         }
-
-        if(ConfigurationCache::instance().tryGetValue("-nogui"))
+        if(ConfigurationCache::instance().keyExists("-nogui"))
         {
             //TODO: Merge GUI project
         }else

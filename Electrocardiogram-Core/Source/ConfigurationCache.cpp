@@ -11,16 +11,7 @@ bool ConfigurationCache::addConfigValue(const std::string& key, const std::strin
     return true;
 }
 
-bool ConfigurationCache::tryGetValue(const std::string& key, std::string* outValue)
+bool ConfigurationCache::keyExists(const std::string& key)
 {
-    const auto iter = configValues.find(key);
-    if(iter != configValues.end())
-    {
-        if(outValue != nullptr)
-        {
-            *outValue = iter->second;
-        }
-        return true;
-    }
-    return false;
+    return configValues.find(key) != configValues.end();
 }
