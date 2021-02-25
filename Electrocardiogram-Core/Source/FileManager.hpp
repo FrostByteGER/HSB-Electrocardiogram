@@ -1,16 +1,16 @@
 ﻿#pragma once
 #include <string>
 #include <fstream>
-#include "Signal.hpp"
+#include <vector>
 
 //TODO: Move to cpp
 // Why its own class? So we dont have to pass filename as constructor arg to Signal or use a static factory
 class FileManager
 {
 public:
-    [[nodiscard]] std::vector<uint16_t> Import(const std::string& filename) const
+    [[nodiscard]] std::vector<double_t> Import(const std::string& filename) const
     {
-        std::vector<uint16_t> data;
+        std::vector<double_t> data;
         std::ifstream inputStream(filename);
         if(!inputStream)
         {
@@ -19,14 +19,8 @@ public:
         std::string line;
         while (std::getline(inputStream, line))
         {
-            const unsigned long rawValue = std::stoul(line);
-            // Value may be beyond (2^16)-1
-            constexpr uint16_t maxValue = std::numeric_limits<uint16_t>::max();
-            if(rawValue > maxValue)
-            {
-                throw std::overflow_error(std::to_string(rawValue) + " exceeds " + std::to_string(maxValue));
-            }
-            data.push_back(static_cast<uint16_t>(rawValue));
+            const double_t rawValue = std::stod(line);
+            data.push_back(rawValue);
         }
         return data;
     }

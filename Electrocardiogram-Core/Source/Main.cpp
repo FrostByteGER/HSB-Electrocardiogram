@@ -8,9 +8,9 @@ int main(int argc, char* argv[])
     try
     {
         std::cout << "Elecrocardiogram!\n";
-        std::vector<uint16_t> data;
+        std::vector<double_t> data = { 600, 470, 170, 430, 300 };
         const FileManager fileManager;
-        bool useGui = true;
+        bool useGui = false;
         for (size_t i = 1; i < argc; ++i)
         {
             std::string argument(argv[i]);
@@ -27,7 +27,6 @@ int main(int argc, char* argv[])
             //TODO: Merge GUI project
         }else
         {
-            //const std::vector<uint16_t> data = { 600, 470, 170, 430, 300 };
             const Signal signal(data);
             std::cout << "Count: " << signal.Count() << "\n"
                 << "Min: " << signal.Minimum() << "\n"
