@@ -1,4 +1,0 @@
-https://www.ncbi.nlm.nih.gov/pmc/articles/PMC1560458/
-https://ixora.io/itp/pcomp/heartbeat-detection-algorithm/
-http://www.paulvangent.com/2016/03/15/analyzing-a-discrete-heart-rate-signal-using-python-part-1/
-https://github.com/luishowell/ecg-detectors

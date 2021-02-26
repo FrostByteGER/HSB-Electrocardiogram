@@ -5,12 +5,10 @@
 
 #include "EKG.hpp"
 
-EKG EKGProcessor::constructEkgFromReadings(const std::vector<double_t>& rawReadings, const std::vector<double_t>& smoothedReadings, uint32_t samplingIntervalMs,
-    int32_t signalRangeMilliVolt, int32_t signalRangeRawMax, int32_t heartbeatTailLength)
+EKG EKGProcessor::constructEkgFromReadings(const std::vector<double_t>& readings, uint32_t samplingIntervalMs, int32_t heartbeatTailLength)
 {
-    const std::vector<double_t> mappedReadings = rawReadings;//mapToMillivoltRange(rawReadings, signalRangeMilliVolt, signalRangeRawMax);
-    const std::vector<Heartbeat> heartbeats = detectHeartbeats(smoothedReadings, samplingIntervalMs, heartbeatTailLength);
-    EKG ecg = EKG(mappedReadings, heartbeats, samplingIntervalMs);
+    const std::vector<Heartbeat> heartbeats = detectHeartbeats(readings, samplingIntervalMs, heartbeatTailLength);
+    EKG ecg = EKG(readings, heartbeats, samplingIntervalMs);
     return ecg;
 }
 
@@ -85,12 +83,12 @@ std::vector<Heartbeat> EKGProcessor::detectHeartbeats(const std::vector<double_t
     return heartbeatPositions;
 }
 
-std::vector<double_t> EKGProcessor::mapToMillivoltRange(const std::vector<double_t>& readingsData, const int32_t signalRangeMilliVolt, const int32_t signalRangeRawMax)
+std::vector<double_t> EKGProcessor::mapToMillivoltRange(const EKG& ecg, const int32_t signalRangeMilliVolt, const int32_t signalRangeRawMax)
 {
     std::vector<double_t> mappedReadings;
-    mappedReadings.reserve(readingsData.size());
+    mappedReadings.reserve(ecg.readings().size());
     const int32_t newRange = signalRangeMilliVolt - (-signalRangeMilliVolt);
-    for (const double_t& i : readingsData)
+    for (const double_t& i : ecg.readings())
     {
         mappedReadings.push_back((i * newRange) / signalRangeRawMax + (-signalRangeMilliVolt));
     }

@@ -50,7 +50,6 @@ void ElectrocardiogramGUI::OnAbout() const
 void ElectrocardiogramGUI::OnLoadFile()
 {
     const QString filename = QFileDialog::getOpenFileName(this->centralWidget(), QString("Open ECG"), QString(), QString("ECG Files (*.dat);;All Files (*)"));
-    qDebug() << filename;
     if(filename.isEmpty())
     {
         return;
@@ -66,10 +65,6 @@ void ElectrocardiogramGUI::OnLoadFile()
         ConfigurationCache::instance().tryGetValue("--smoothing-window-size", &windowSize);
         uint32_t samplingIntervalMs = 5;
         ConfigurationCache::instance().tryGetValue("--sampling-interval", &samplingIntervalMs);
-        int32_t signalRangeMilliVolt = 4;
-        ConfigurationCache::instance().tryGetValue("--signalrange-millivolts", &signalRangeMilliVolt);
-        int32_t signalRangeRawMax = std::numeric_limits<uint16_t>::max();
-        ConfigurationCache::instance().tryGetValue("--signalrange-max", &signalRangeRawMax);
         int32_t tailLength = 25;
         ConfigurationCache::instance().tryGetValue("--heartbeat-tail-length", &tailLength);
 
@@ -77,8 +72,8 @@ void ElectrocardiogramGUI::OnLoadFile()
         Signal signal = Signal(loadedData);
         const Signal smoothedSignal = signalProcessor.smoothSignal(signal, windowSize);
 
-        loadedEcg = std::make_unique<EKG>(ecgProcessor.constructEkgFromReadings(signal.readings(), smoothedSignal.readings(), 
-            samplingIntervalMs, signalRangeMilliVolt, signalRangeRawMax, tailLength));
+        loadedEcg = std::make_unique<EKG>(ecgProcessor.constructEkgFromReadings(smoothedSignal.readings(), 
+            samplingIntervalMs, tailLength));
 
         auto series = new QtCharts::QLineSeries();
         double_t time = 0;
@@ -148,16 +143,25 @@ void ElectrocardiogramGUI::OnLoadFile()
 
 void ElectrocardiogramGUI::OnSaveEcg()
 {
-    const QString filename = QFileDialog::getSaveFileName(this->centralWidget(), QString("Save ECG"), QString(), QString("ECG Files (*.dat);;All Files (*)"));
+    const QString filename = QFileDialog::getSaveFileName(this->centralWidget(), QString("Save CSV"), QString(), QString("CSV Files (*.csv);;All Files (*)"));
     SaveFile(loadedEcg.get(), filename);
 }
 
 void ElectrocardiogramGUI::SaveFile(EKG* ecg, const QString& filename)
 {
-    qDebug() << filename;
     if (!filename.isEmpty())
     {
-        const std::vector<std::string> data = ecgProcessor.exportToCsv(*ecg);
+        int32_t signalRangeMilliVolt = 4;
+        ConfigurationCache::instance().tryGetValue("--signalrange-millivolts", &signalRangeMilliVolt);
+        int32_t signalRangeRawMax = std::numeric_limits<uint16_t>::max();
+        ConfigurationCache::instance().tryGetValue("--signalrange-max", &signalRangeRawMax);
+        uint32_t samplingIntervalMs = 5;
+        ConfigurationCache::instance().tryGetValue("--sampling-interval", &samplingIntervalMs);
+        int32_t tailLength = 25;
+        ConfigurationCache::instance().tryGetValue("--heartbeat-tail-length", &tailLength);
+        const auto mappedData = ecgProcessor.mapToMillivoltRange(*ecg, signalRangeMilliVolt, signalRangeRawMax);
+        const EKG mappedEcg = ecgProcessor.constructEkgFromReadings(mappedData, samplingIntervalMs, tailLength);
+        const std::vector<std::string> data = ecgProcessor.exportToCsv(mappedEcg);
         fileManager.Export(data, filename.toStdString());
     }
 }

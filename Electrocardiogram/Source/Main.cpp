@@ -51,7 +51,7 @@ int main(int argc, char* argv[])
 
             // Load and smooth signal
             const Signal signal = signalProcessor.constructSignalFromReadings(rawReadings);
-            int32_t windowSize = 21;
+            int32_t windowSize = 10;
             ConfigurationCache::instance().tryGetValue("--smoothing-window-size", &windowSize);
             std::cout << "Smoothing signal with window-size " << windowSize << std::endl;
             const Signal smoothedSignal = signalProcessor.smoothSignal(signal, windowSize);
@@ -65,7 +65,7 @@ int main(int argc, char* argv[])
             ConfigurationCache::instance().tryGetValue("--signalrange-max", &signalRangeRawMax);
             int32_t tailLength = 25;
             ConfigurationCache::instance().tryGetValue("--heartbeat-tail-length", &tailLength);
-            const EKG ecg = ecgProcessor.constructEkgFromReadings(rawReadings, smoothedSignal.readings(), samplingIntervalMs, signalRangeMilliVolt, signalRangeRawMax, tailLength);
+            EKG ecg = ecgProcessor.constructEkgFromReadings(smoothedSignal.readings(), samplingIntervalMs, tailLength);
 
             std::cout << "ECG Statistics: " << "\n"
                 << "Count: " << ecg.count() << "\n"
@@ -92,6 +92,8 @@ int main(int argc, char* argv[])
             std::string outFilePath;
             if(ConfigurationCache::instance().tryGetValue("--output-file", &outFilePath))
             {
+                const auto mappedData = ecgProcessor.mapToMillivoltRange(ecg, signalRangeMilliVolt, signalRangeRawMax);
+                ecg = ecgProcessor.constructEkgFromReadings(mappedData, samplingIntervalMs, tailLength);
                 fileManager.Export(ecgProcessor.exportToCsv(ecg), outFilePath);
                 std::cout << "Exported ECG signal to file " << outFilePath << std::endl;
             }
