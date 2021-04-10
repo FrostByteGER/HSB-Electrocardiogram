@@ -1,5 +1,5 @@
 # HSB-Electrocardiogram
-A project for the Bremen City University of Applied Sciences C++ course. Core functionality includes parsing of a unsigned 16bit DAC electrocardiogram signal file
+A project for the Bremen City University of Applied Sciences C++ course. Core functionality includes parsing of a unsigned 16bit DAC electrocardiogram signal file,
 analyzing the signal and either showing basic information in a commandline or in a Qt5 GUI. Additionally the signal can be analyzed for potential heartbeats using
 simple signal processing algorithms.
 
